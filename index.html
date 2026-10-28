@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#2f5a32">
+<meta name="theme-color" content="#10213b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -6290,7 +6290,7 @@ refreshUnits();fillUnitSel("قطعة");
 
 
 /* ===== v26: About the app ===== */
-var APP_VER="57",APP_DATE="2026-10-28";
+var APP_VER="60",APP_DATE="2026-10-28";
 (function(){
   document.body.insertAdjacentHTML("beforeend",'<dialog id="abDlg" style="width:min(460px,94vw);border:0;border-radius:14px;padding:14px;background:var(--card);color:var(--ink)"></dialog>');
   function fmtB(n){if(!(n>=0))return"-";var u=["B","KB","MB","GB"],i=0;while(n>=1024&&i<3){n/=1024;i++}return(i?n.toFixed(n<10?2:1):Math.round(n))+" "+u[i]}
@@ -7451,7 +7451,8 @@ var APP_VER="57",APP_DATE="2026-10-28";
 /* ===== v37: WhatsApp-style look & navigation ===== */
 (function(){
   var LK="inv-look";
-  function look(){try{return localStorage.getItem(LK)==="classic"?"classic":"wa"}catch(e){return"wa"}}
+  try{if(!localStorage.getItem("inv-royal-mig")){localStorage.setItem("inv-royal-mig","1");localStorage.setItem(LK,"royal")}}catch(e){}
+  function look(){try{var v=localStorage.getItem(LK);return v==="classic"?"classic":v==="wa"?"wa":"royal"}catch(e){return"royal"}}
   var pat="url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.045' stroke-width='1.4' stroke-linecap='round'%3E%3Ccircle cx='20' cy='22' r='7'/%3E%3Cpath d='M62 14l10 10M72 14L62 24'/%3E%3Crect x='92' y='12' width='14' height='11' rx='3'/%3E%3Cpath d='M16 70q8-10 16 0t16 0'/%3E%3Ccircle cx='80' cy='66' r='5'/%3E%3Cpath d='M100 90l8 8M108 90l-8 8M30 104l9-6 9 6z'/%3E%3Ccircle cx='62' cy='100' r='3'/%3E%3C/g%3E%3C/svg%3E\")";
   var patD=pat.replace("%23000","%23fff").replace("stroke-opacity='.045'","stroke-opacity='.035'");
   var css=
@@ -7494,10 +7495,10 @@ var APP_VER="57",APP_DATE="2026-10-28";
   var st=document.createElement("style");st.id="waCss";st.textContent=css;document.head.appendChild(st);
   var meta=document.querySelector('meta[name="theme-color"]');if(!meta){meta=document.createElement("meta");meta.name="theme-color";document.head.appendChild(meta)}
   function apply(){
-    var on=look()==="wa";document.documentElement.classList.toggle("wa",on);
+    var lk0=look(),on=lk0!=="classic";document.documentElement.classList.toggle("wa",on);document.documentElement.classList.toggle("royal",lk0==="royal");
     var dark=window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches,t=document.documentElement.getAttribute("data-theme");
     var isD=t==="dark"||(t!=="light"&&dark);
-    meta.content=on?(isD?"#202c33":"#008069"):(isD?"#141a12":"#eef1ea");
+    meta.content=on?(lk0==="royal"?(isD?"#0b1a30":"#10213b"):(isD?"#202c33":"#008069")):(isD?"#141a12":"#eef1ea");
   }
   apply();
   try{matchMedia("(prefers-color-scheme:dark)").addEventListener("change",apply)}catch(e){}
@@ -7505,7 +7506,7 @@ var APP_VER="57",APP_DATE="2026-10-28";
   var _tab=tab,order=function(){return Object.keys(PAGES).filter(function(k){return permOK(k)})};
   tab=function(n){
     var p=CUR,o=order();_tab(n);
-    if(look()==="wa"&&CUR!==p){var d=o.indexOf(CUR)>o.indexOf(p)?1:-1,el=$("xPages");if(el){el.style.setProperty("--wx",(UI==="en"?d:-d)*16+"px");el.classList.remove("wpIn");void el.offsetWidth;el.classList.add("wpIn")}}
+    if(look()!=="classic"&&CUR!==p){var d=o.indexOf(CUR)>o.indexOf(p)?1:-1,el=$("xPages");if(el){el.style.setProperty("--wx",(UI==="en"?d:-d)*16+"px");el.classList.remove("wpIn");void el.offsetWidth;el.classList.add("wpIn")}}
     badge();
   };
   /* badge on the home tab = number of alerts */
@@ -7941,15 +7942,15 @@ var APP_VER="57",APP_DATE="2026-10-28";
   function s(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
   function hx(c){var n=parseInt(c.slice(1),16);return[n>>16&255,n>>8&255,n&255]}
   function mix(c,t,p){var a=hx(c),b=hx(t);return"#"+a.map(function(v,i){return("0"+Math.round(v+(b[i]-v)*p).toString(16)).slice(-2)}).join("")}
-  var PALS=[["#2f5a32",["أخضر زراعي","Farm green"]],["#008069",["أخضر واتساب","WhatsApp teal"]],["#1565c0",["أزرق","Blue"]],["#5e35b1",["بنفسجي","Purple"]],["#e65100",["برتقالي","Orange"]],["#c2185b",["وردي","Rose"]],["#6d4c41",["بني ترابي","Earth brown"]],["#37474f",["رمادي فحمي","Slate"]],["#b8860b",["ذهبي","Gold"]]];
+  var PALS=[["#2f5a32",["افتراضي حسب التصميم","Style default"]],["#008069",["أخضر واتساب","WhatsApp teal"]],["#1565c0",["أزرق","Blue"]],["#5e35b1",["بنفسجي","Purple"]],["#e65100",["برتقالي","Orange"]],["#c2185b",["وردي","Rose"]],["#6d4c41",["بني ترابي","Earth brown"]],["#37474f",["رمادي فحمي","Slate"]],["#b8860b",["ذهبي","Gold"]]];
   var st=document.createElement("style");st.id="palCss";document.head.appendChild(st);
   var meta=document.querySelector('meta[name="theme-color"]');
   function css(c){
     var l="--g:"+c+";--hdr:"+c+";--acc:"+mix(c,"#ffffff",.15)+";--g2:"+mix(c,"#ffffff",.84)+";--bub:"+mix(c,"#ffffff",.84)+";--on:#fff;",
         d="--g:"+mix(c,"#ffffff",.38)+";--hdr:"+mix(c,"#000000",.55)+";--acc:"+mix(c,"#ffffff",.2)+";--g2:"+mix(c,"#000000",.62)+";--bub:"+mix(c,"#000000",.5)+";--on:#0b140c;";
-    return"html[data-pal],html[data-pal].wa.wa{"+l+"}"+
-      "html[data-pal][data-theme=dark],html[data-pal].wa.wa[data-theme=dark]{"+d+"}"+
-      "@media (prefers-color-scheme:dark){html[data-pal]:not([data-theme=light]),html[data-pal].wa.wa:not([data-theme=light]){"+d+"}}"+
+    return"html[data-pal][data-pal][data-pal],html[data-pal][data-pal][data-pal].wa.wa{"+l+"}"+
+      "html[data-pal][data-pal][data-pal][data-theme=dark],html[data-pal][data-pal][data-pal].wa.wa[data-theme=dark]{"+d+"}"+
+      "@media (prefers-color-scheme:dark){html[data-pal][data-pal][data-pal]:not([data-theme=light]),html[data-pal][data-pal][data-pal].wa.wa:not([data-theme=light]){"+d+"}}"+
       "html[data-pal] #topBar{background:var(--hdr)}";
   }
   function setMeta(){if(!meta)return;var tb=$("topBar"),c=tb?getComputedStyle(tb).backgroundColor:"";if(c&&c!=="rgba(0, 0, 0, 0)")meta.content=c}
@@ -7962,7 +7963,7 @@ var APP_VER="57",APP_DATE="2026-10-28";
   var _t=tab;tab=function(n){_t(n);setTimeout(setMeta,60)};
   function mode(){try{return JSON.parse(g(RK)||"{}").theme||"auto"}catch(e){return"auto"}}
   function setMode(v){var o={};try{o=JSON.parse(g(RK)||"{}")}catch(e){}if(v==="auto")delete o.theme;else o.theme=v;s(RK,JSON.stringify(o));if(v==="auto")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme",v);apply()}
-  function look(){return g(LK2)==="classic"?"classic":"wa"}
+  function look(){var v=g(LK2);return v==="classic"?"classic":v==="wa"?"wa":"royal"}
   var d=document.createElement("dialog");d.id="thDlg";document.body.appendChild(d);
   var sty=document.createElement("style");sty.textContent="#thDlg{max-width:440px;width:92vw;border:0;border-radius:18px;padding:16px;background:var(--card);color:var(--ink)}#thDlg h3{margin:0 0 10px}#thDlg h4{margin:12px 0 6px;font-size:14px;color:var(--mute)}#thDlg .sg{display:flex;gap:6px;flex-wrap:wrap}#thDlg .sg button{flex:1 1 28%;padding:9px 6px}#thDlg .sw{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}#thDlg .sw button{aspect-ratio:1;border-radius:50%;border:3px solid transparent;padding:0;min-height:0}#thDlg .sw button.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--card) inset}#thDlg .sw input{width:100%;height:100%;border:0;padding:0;background:none;opacity:0;position:absolute;inset:0}#thDlg .sw label{position:relative;aspect-ratio:1;border-radius:50%;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden}#thDlg .pv{margin-top:12px;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.25)}#thDlg .pv b{display:block;background:var(--hdr,var(--g));color:#fff;padding:10px 12px}#thDlg .pv div{padding:10px 12px;background:var(--bg)}#thDlg .pv span{display:inline-block;background:var(--g2);color:var(--ink);border-radius:10px;padding:6px 12px}";document.head.appendChild(sty);
   function draw(){
@@ -7970,8 +7971,8 @@ var APP_VER="57",APP_DATE="2026-10-28";
     var seg=function(arr,cur,key){return'<div class="sg">'+arr.map(function(x){return'<button type="button" class="'+(cur===x[0]?"pri":"")+'" data-'+key+'="'+x[0]+'">'+x[1]+'</button>'}).join("")+'</div>'};
     d.innerHTML='<h3>🎨 '+L("المظهر والألوان","Appearance & colours")+'</h3>'+
     '<h4>'+L("الوضع","Mode")+'</h4>'+seg([["auto","🌓 "+L("تلقائي","Auto")],["light","☀️ "+L("فاتح","Light")],["dark","🌙 "+L("داكن","Dark")]],m,"m")+
-    '<h4>'+L("التصميم","Style")+'</h4>'+seg([["wa","💬 "+L("واتساب","WhatsApp")],["classic","📋 "+L("كلاسيكي","Classic")]],lk,"l")+
-    '<h4>'+L("اللون الأساسي","Accent colour")+'</h4><div class="sw">'+PALS.map(function(p){return'<button type="button" data-c="'+p[0]+'" title="'+(en?p[1][1]:p[1][0])+'" style="background:'+p[0]+'" class="'+(c===p[0]?"on":"")+'"></button>'}).join("")+'<label title="'+L("لون مخصص","Custom")+'">🎨<input type="color" id="thCol" value="'+(/^#[0-9a-f]{6}$/.test(c)?c:"#2f5a32")+'"></label></div>'+
+    '<h4>'+L("التصميم","Style")+'</h4>'+seg([["royal","👑 "+L("ملكي","Royal")],["wa","💬 "+L("واتساب","WhatsApp")],["classic","📋 "+L("كلاسيكي","Classic")]],lk,"l")+
+    '<h4>'+L("اللون الأساسي","Accent colour")+'</h4><div class="sw">'+PALS.map(function(p){return'<button type="button" data-c="'+p[0]+'" title="'+(en?p[1][1]:p[1][0])+'" style="background:'+(p[0]==="#2f5a32"?(lk==="royal"?"#10213b":lk==="wa"?"#008069":"#2f5a32"):p[0])+'" class="'+(c===p[0]?"on":"")+'"></button>'}).join("")+'<label title="'+L("لون مخصص","Custom")+'">🎨<input type="color" id="thCol" value="'+(/^#[0-9a-f]{6}$/.test(c)?c:"#2f5a32")+'"></label></div>'+
     '<div class="pv"><b>'+L("معاينة الشريط العلوي","Header preview")+'</b><div><span>'+L("رسالة / بطاقة","Card / bubble")+'</span></div></div>'+
     '<div class="sg" style="margin-top:12px"><button type="button" data-r="1">↺ '+L("استعادة الافتراضي","Reset")+'</button><button type="button" class="pri" data-x="1">'+L("تم","Done")+'</button></div>';
   }
@@ -8355,6 +8356,150 @@ var APP_VER="57",APP_DATE="2026-10-28";
   "html .tgl button{border-radius:20px}html .tgl button.pri{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 2px 6px rgba(0,0,0,.18)}"+
   "@media (prefers-reduced-motion:reduce){html button{transition:none}}";
   document.head.appendChild(s);
+})();
+
+/* ===== v45: "Royal" style (navy & gold) - chosen design B ===== */
+(function(){
+  var lk=document.createElement("link");lk.rel="stylesheet";lk.href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap";document.head.appendChild(lk);
+  var L1="--bg:#f6f3ec;--card:#fff;--ink:#14233a;--mute:#4d5a6e;--line:#e1d6b8;--g:#10213b;--g2:#f1e6c6;--on:#f7ecc9;--warn:#8c1d18;--warn2:#f3dcd9;--inp:#efe9d8;--hdr:#10213b;--acc:#c9a24b;--bub:#f1e6c6;";
+  var D1="--bg:#0b1526;--card:#14233a;--ink:#f3e7c4;--mute:#a9b4c6;--line:#2b3d5c;--g:#e8cf8e;--g2:#22324d;--on:#10213b;--warn:#ff9a8f;--warn2:#3d1c19;--inp:#1d2d46;--hdr:#0b1a30;--acc:#c9a24b;--bub:#22324d;";
+  var R="html.royal.wa.wa";
+  var pat="html.royal.wa body{background-image:none!important}";
+  var c=
+  R+"{"+L1+"}"+
+  R+"[data-theme=dark]{"+D1+"}"+
+  "@media (prefers-color-scheme:dark){"+R+":not([data-theme=light]){"+D1+"}}"+
+  pat+
+  /* header */
+  "html.royal #topBar{background:var(--hdr);border-bottom:3px solid #c9a24b;box-shadow:0 2px 8px rgba(16,33,59,.35)}"+
+  "html.royal #topBar h1{font-family:'Amiri',Tajawal,serif;font-size:21px;font-weight:700;color:#f7ecc9;letter-spacing:.2px}"+
+  "html.royal #topBar #prName{color:#cdbf98}"+
+  "html.royal #topBar #mnuBtn,html.royal #topBar #gsBtn{background:transparent;border:1px solid #c9a24b;color:#e8cf8e;border-radius:12px;width:44px;height:44px;padding:0;font-size:21px}"+
+  /* chips on navy */
+  "html.royal #navS button{background:rgba(255,255,255,.07);color:#cdbf98;border:1px solid rgba(201,162,75,.45);font-weight:700}"+
+  "html.royal #navS button.on{background:#c9a24b;color:#10213b;border-color:#c9a24b;font-weight:800}"+
+  /* bottom bar */
+  "html.royal #navG{background:var(--hdr);border-top:1px solid #c9a24b}"+
+  "html.royal #navG button{color:#a9b2c2}html.royal #navG button.on{color:#e8cf8e}html.royal #navG button.on i{background:rgba(201,162,75,.2)}html.royal #navG button:active{background:rgba(201,162,75,.16)}"+
+  "html.royal #navG .bdg{background:#c9a24b;color:#10213b}"+
+  /* primary + fab */
+  "html.royal .pri{background-color:#c9a24b;background-image:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 60%);color:#10213b;border:0}"+
+  "html.royal #fabOrd{background-color:#c9a24b;color:#10213b}"+
+  /* cards */
+  "html.royal .item,html.royal .sum div,html.royal .bgc,html.royal .hdP,html.royal .hdA,html.royal .gsI,html.royal .adC,html.royal .snC,html.royal .vlR,html.royal .lsn,html.royal .pyR{border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(16,33,59,.06)}"+
+  "html.royal .sum b{font-family:'Amiri',Tajawal,serif;font-size:20px}"+
+  "html.royal .sum .pf{background:var(--g2);border:1px solid #c9a24b}"+
+  "html.royal #mnu{background:var(--card);border:1px solid #c9a24b;border-radius:16px}html.royal #mnu button:active{background:var(--g2)}"+
+  "html.royal dialog h2,html.royal dialog h3{font-family:'Amiri',Tajawal,serif;color:var(--ink)}"+
+  "html.royal .tools input,html.royal .tools select,html.royal input,html.royal select,html.royal textarea{border-color:var(--line)}"+
+  "html.royal input:focus,html.royal select:focus,html.royal textarea:focus{border-color:#c9a24b}"+
+  "html.royal button:focus-visible,html.royal input:focus-visible,html.royal select:focus-visible,html.royal textarea:focus-visible{outline-color:rgba(201,162,75,.6)}"+
+  "html.royal .acts button:not(.pri),html.royal .tgl button:not(.pri){border-color:#d9c58f}";
+  var st=document.createElement("style");st.id="royalCss";st.textContent=c;document.head.appendChild(st);
+  if(window.waApply)window.waApply();
+  var lkb=$("lkBtn");if(lkb)lkb.style.display="none";
+})();
+
+/* ===== v46: home launcher tiles, camera capture for documents, desktop layout ===== */
+(function(){
+  function en(){return UI==="en"}
+  var st=document.createElement("style");
+  st.textContent=".lnG{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:8px 0 14px}.lnG button{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:2px;text-align:start;min-height:104px;padding:14px;border-radius:18px}.lnG .ic{font-size:36px;line-height:1.1;margin-bottom:4px}.lnG b{font-size:16px;font-weight:800}.lnG small{font-size:12px;color:var(--mute);font-weight:500;line-height:1.4}"+
+  "#dcCam{margin:6px 0}"+
+  "@media (min-width:900px){main{max-width:1100px!important}.lnG{grid-template-columns:repeat(4,minmax(0,1fr))}.sum{grid-template-columns:repeat(4,minmax(0,1fr))!important}dialog{max-width:680px}#navG{max-width:760px;margin-inline:auto;border-radius:18px 18px 0 0}html.wa.royal #navG{border-radius:18px 18px 0 0}#hdash{display:block}}"+
+  "@media (min-width:1200px){main{max-width:1240px!important}}";
+  document.head.appendChild(st);
+  var TL=[
+   {ic:"🏢",t:["شركتي","My company"],s:["بيانات الشركة والتراخيص","Company data & licences"],f:function(){var b=$("coOpen");if(b)b.click()}},
+   {ic:"📁",t:["المستندات","Documents"],s:["البطاقات والسجلات والعقود","IDs, registers, contracts"],f:function(){tab("dv")}},
+   {ic:"👷",t:["العمال","Workers"],s:["ملفات الموظفين والوثائق","Staff files & documents"],f:function(){tab("dc");setTimeout(function(){var el=$("pgDc")||document.getElementById(PAGES.dc.pg);if(!el)return;[].slice.call(el.querySelectorAll("button")).some(function(b){if(/👷/.test(b.textContent)){b.click();return true}})},350)}},
+   {ic:"📋",t:["المشاريع","Projects"],s:["الميزانية والمتابعة والإنجاز","Budget, follow-up, progress"],f:function(){tab("pp")}},
+   {ic:"💰",t:["المالية","Finance"],s:["الإيرادات والمصروفات والأرصدة","Revenue, expenses, balances"],f:function(){tab("e")}},
+   {ic:"🧾",t:["الفواتير","Invoices"],s:["الفواتير والمدفوعات","Invoices & payments"],f:function(){tab("v")}},
+   {ic:"📦",t:["المشتريات","Purchases"],s:["طلبات الشراء والموردون","Orders & suppliers"],f:function(){tab("u")}},
+   {ic:"📊",t:["التقارير","Reports"],s:["تقارير الشركة وأدائها","Company reports & performance"],f:function(){tab("rp")}}
+  ];
+  function inject(){
+    if(ROLE==="s")return;var h=$("hdash");if(!h||$("lnG"))return;
+    var hs=h.querySelectorAll("h3"),anchor=hs[1]||null;
+    var d=document.createElement("div");d.id="lnG";d.className="lnG";
+    d.innerHTML=TL.map(function(x,i){return'<button type="button" data-i="'+i+'"><span class="ic" aria-hidden="true">'+x.ic+'</span><b>'+(en()?x.t[1]:x.t[0])+'</b><small>'+(en()?x.s[1]:x.s[0])+'</small></button>'}).join("");
+    d.onclick=function(e){var b=e.target.closest("[data-i]");if(b)TL[+b.dataset.i].f()};
+    var title=document.createElement("h3");title.textContent="🧩 "+L("الأقسام","Sections");
+    if(anchor){h.insertBefore(title,anchor);h.insertBefore(d,anchor)}else{h.appendChild(title);h.appendChild(d)}
+  }
+  var _r=PAGES.h.r;PAGES.h.r=function(){_r.apply(this,arguments);inject()};
+  /* camera capture */
+  var f=$("dcFile");
+  if(f&&!$("dcCam")){
+    var inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.setAttribute("capture","environment");inp.hidden=true;inp.id="dcCamIn";
+    var b=document.createElement("button");b.type="button";b.id="dcCam";b.textContent="📷 "+L("تصوير بالكاميرا","Take a photo");
+    f.parentNode.insertBefore(b,f);f.parentNode.appendChild(inp);
+    b.onclick=function(){inp.click()};
+    inp.onchange=function(){var fl=inp.files&&inp.files[0];if(!fl)return;try{var dt=new DataTransfer();dt.items.add(fl);f.files=dt.files;f.dispatchEvent(new Event("change",{bubbles:true}))}catch(e){alert(L("تعذر استخدام الكاميرا هنا. اختر صورة من الجهاز.","Camera not available here. Pick a photo instead."))}inp.value=""};
+  }
+  if(window.INTRO_ADD)INTRO_ADD("h",{ic:"🏠",t:["الرئيسية: لوحة المتابعة","Home: the follow-up board"],b:[["أعلى الصفحة: تنبيهات انتهاء الوثائق والنواقص والمتأخرات لكل مشاريعك.","Top: expiry, missing-document and overdue alerts for all projects."],["تحتها أقسام كبيرة تفتحها بلمسة: الشركة، المستندات، العمال، المشاريع، المالية، الفواتير، المشتريات، التقارير.","Big section tiles below open each area with one tap."],["اسحب للأسفل قليلاً للبحث، وأكثر للتحديث.","Pull down a little to search, more to refresh."]],tour:"start"});
+})();
+
+/* ===== v47: four-state sync status + automatic pre-update backup ===== */
+(function(){
+  var st=document.createElement("style");
+  st.textContent="#cloudBtn.cloud-warn{background:#e08a00!important;color:#fff!important;border-color:#e08a00!important}#cloudBtn.cloud-busy{background:#0a64d8!important;color:#fff!important;border-color:#0a64d8!important}";
+  document.head.appendChild(st);
+  function sstate(){
+    if(!(window.RG&&RG.cfg&&RG.cfg()))return "off";
+    var s=RG.state(),S=RG.store&&RG.store();
+    if(navigator.onLine===false)return S&&S.dirty?"local":"err";
+    if(s.state==="busy")return "busy";
+    if(s.state==="err")return "err";
+    if(S&&S.dirty)return "local";
+    return "ok";
+  }
+  var LBL={ok:["🟢","تم الحفظ والمزامنة: البيانات محفوظة محليًا وسحابيًا","Saved & synced: stored locally and in the cloud"],
+   local:["🟠","محفوظ محليًا: البيانات على الهاتف، والرفع لم يكتمل بعد","Saved locally: upload not finished yet"],
+   busy:["🔵","جارٍ الرفع إلى Google Drive…","Uploading to Google Drive…"],
+   err:["🔴","فشل الرفع: تحقق من الاتصال ثم أعد المحاولة","Upload failed: check the connection and retry"]};
+  function paint(){
+    var cb=$("cloudBtn");if(!cb)return;var k=sstate();
+    if(k==="off"){var g0=$("gdSt");return}
+    var m=LBL[k];
+    cb.className="cloud-"+({ok:"ok",local:"warn",busy:"busy",err:"bad"})[k];
+    cb.textContent="☁️ "+m[0];cb.title=L(m[1],m[2]);
+    var g=$("gdSt");if(g){g.textContent=m[0]+" "+L(m[1],m[2])+(k==="ok"&&RG.state().last?"  ("+RG.state().last+")":"");
+      if(!$("gdRetry")&&(k==="err"||k==="local")){var b=document.createElement("button");b.type="button";b.id="gdRetry";b.textContent="🔁 "+L("إعادة المحاولة الآن","Retry now");b.onclick=function(){RG.syncNow().then(paint)};g.parentNode.insertBefore(b,g.nextSibling)}
+      else if($("gdRetry")&&(k==="ok"||k==="busy"))$("gdRetry").remove()}
+  }
+  window.addEventListener("rg-sync",paint);window.addEventListener("online",paint);window.addEventListener("offline",paint);
+  setInterval(paint,1500);setTimeout(paint,500);
+  /* pre-update snapshot */
+  var DB="rg-prebak";
+  function idb(){return new Promise(function(res,rej){var r=indexedDB.open(DB,1);r.onupgradeneeded=function(){r.result.createObjectStore("s")};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
+  function put(k,v){return idb().then(function(d){return new Promise(function(res,rej){var t=d.transaction("s","readwrite");t.objectStore("s").put(v,k);t.oncomplete=res;t.onerror=function(){rej(t.error)}})})}
+  function get(k){return idb().then(function(d){return new Promise(function(res,rej){var q=d.transaction("s").objectStore("s").get(k);q.onsuccess=function(){res(q.result)};q.onerror=function(){rej(q.error)}})})}
+  function snap(){var o={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);o[k]=localStorage.getItem(k)}return o}
+  function dbDump(){return Promise.resolve(null)}
+  var LV="inv-lastver";
+  try{
+    var last=localStorage.getItem(LV);
+    if(last&&last!==APP_VER&&localStorage.length>2){
+      put("last",{from:last,to:APP_VER,at:Date.now(),data:snap()}).then(function(){try{localStorage.setItem("inv-prebak-note",last+"→"+APP_VER+"|"+new Date().toISOString().slice(0,16).replace("T"," "))}catch(e){}}).catch(function(){});
+    }
+    localStorage.setItem(LV,APP_VER);
+  }catch(e){}
+  /* restore button inside the backup dialog */
+  function addBtn(){
+    var d=$("bkDlg");if(!d||$("pbRs"))return;var c=d.querySelector(".bkfull .bb");if(!c)return;
+    var b=document.createElement("button");b.type="button";b.id="pbRs";b.textContent="♻️ "+L("استرجاع نسخة ما قبل آخر تحديث","Restore pre-update copy");
+    b.onclick=function(){
+      get("last").then(function(r){
+        if(!r){alert(L("لا توجد نسخة ما قبل تحديث محفوظة بعد. تُحفظ تلقائياً عند أول فتح بعد كل تحديث.","No pre-update copy yet. One is saved automatically on first launch after each update."));return}
+        if(!confirm(L("سيتم استبدال بيانات هذا الجهاز بنسخة ما قبل التحديث ("+r.from+") المحفوظة "+new Date(r.at).toLocaleString("en-GB")+". متابعة؟","Replace this device's data with the pre-update copy ("+r.from+") saved "+new Date(r.at).toLocaleString("en-GB")+"?")))return;
+        try{localStorage.clear();Object.keys(r.data).forEach(function(k){localStorage.setItem(k,r.data[k])});localStorage.setItem(LV,APP_VER)}catch(e){alert(L("تعذر الاسترجاع","Restore failed"));return}
+        location.reload()}).catch(function(){alert(L("تعذر قراءة النسخة","Could not read the copy"))})};
+    c.appendChild(b);
+  }
+  var _o=document.getElementById("bkDlg");
+  if(_o)new MutationObserver(addBtn).observe(_o,{attributes:true,attributeFilter:["open"]});addBtn();
 })();
 
 mkPages();applyRole();
